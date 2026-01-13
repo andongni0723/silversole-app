@@ -70,8 +70,8 @@ Future<void> showUpdateVersionDialog(BuildContext context) async {
                 // margin: const EdgeInsets.symmetric(vertical: 20),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  'New Version $latestVersion',
-                  style: ts.headlineMedium?.copyWith(color: cs.primaryFixed),
+                  '發現新版本 $latestVersion',
+                  style: ts.headlineMedium?.copyWith(color: cs.primaryFixed, fontWeight: FontWeight.w600),
                 ),
               ),
 
