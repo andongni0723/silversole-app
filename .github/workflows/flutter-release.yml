@@ -81,3 +81,10 @@ jobs:
             --title "${GITHUB_REF_NAME}" \
             --notes "$NOTES" \
             build/app/outputs/flutter-apk/*arm64-v8a-release.apk
+
+      - name: Notify Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: Ilshidur/action-discord@0.4.0
+        with:
+          args: "SilverSole APP 新版本：{{ EVENT_PAYLOAD.repository.full_name }} {{ EVENT_PAYLOAD.release.tag_name }} $NOTES\n{{ EVENT_PAYLOAD.release.html_url }\n開啟 APP 後即可快速更新"
