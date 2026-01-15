@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.0
+更新內容:
+- 支持綁定 SilverSole 裝置
+- 新增登入持久化 (保持登入狀態)
+
+Updates:
+- Added support for binding SilverSole devices
+- Added persistent login (keeps you signed in)
+
 ## v0.3.0
 更新內容:
 - 支持「郵箱密碼」登入

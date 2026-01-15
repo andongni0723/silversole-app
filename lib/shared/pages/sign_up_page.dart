@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +7,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:silversole/core/error/error_logger.dart';
 import 'package:silversole/core/error/result.dart';
 import 'package:silversole/shared/providers/auth_provider.dart';
+
+import '../../core/utils/field_validator.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
@@ -38,21 +39,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   void setPassword(String value) => setState(() => password = value);
 
   void setConfirmPassword(String value) => setState(() => confirmPassword = value);
-
-  String? fieldEmptyValidator(String? value) {
-    if (value == null || value.trim().isEmpty) return 'field_required'.tr();
-    return null;
-  }
-
-  String? emailValidator(String value) {
-    if (!EmailValidator.validate(value.trim())) return 'invalid_email'.tr();
-    return null;
-  }
-
-  String? confirmPasswordMatchValidator(String value) {
-    if (value != password) return 'password_mismatch'.tr();
-    return null;
-  }
 
   void signInGoogle() => comingSoon();
 
@@ -86,77 +72,78 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final tt = Theme.of(context).textTheme;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(onPressed: back, icon: const Icon(LucideIcons.arrowLeft)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48),
-        child: Form(
-          key: _formKey,
-          autovalidateMode: _autoValidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 16,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 100, bottom: 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 8,
-                  children: [
-                    Text('sign_up'.tr(), style: tt.headlineLarge?.copyWith(fontWeight: FontWeight.bold)),
-                    Text('sign_up_intro'.tr(), style: tt.titleSmall?.copyWith(color: Colors.grey)),
-                  ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(48, 0, 48, MediaQuery.of(context).viewInsets.bottom + 24),
+          child: Form(
+            key: _formKey,
+            autovalidateMode: _autoValidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 16,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 100, bottom: 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 8,
+                    children: [
+                      Text('sign_up'.tr(), style: tt.headlineLarge?.copyWith(fontWeight: FontWeight.bold)),
+                      Text('sign_up_intro'.tr(), style: tt.titleSmall?.copyWith(color: Colors.grey)),
+                    ],
+                  ),
                 ),
-              ),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'email'.tr(),
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(LucideIcons.mail),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: 'email'.tr(),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(LucideIcons.mail),
+                  ),
+                  validator: (val) => fieldEmptyValidator(val) ?? emailValidator(val ?? ''),
+                  onChanged: (value) {
+                    clearValidatorHint();
+                    setEmail(value);
+                  },
                 ),
-                validator: (val) => fieldEmptyValidator(val) ?? emailValidator(val ?? ''),
-                onChanged: (value) {
-                  clearValidatorHint();
-                  setEmail(value);
-                },
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'password'.tr(),
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(LucideIcons.lock),
+                TextFormField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'password'.tr(),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(LucideIcons.lock),
+                  ),
+                  validator: (val) => fieldEmptyValidator(val),
+                  onChanged: (value) {
+                    clearValidatorHint();
+                    setPassword(value);
+                  },
                 ),
-                validator: (val) => fieldEmptyValidator(val),
-                onChanged: (value) {
-                  clearValidatorHint();
-                  setPassword(value);
-                },
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'confirm_password'.tr(),
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(LucideIcons.lock),
+                TextFormField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'confirm_password'.tr(),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(LucideIcons.lock),
+                  ),
+                  validator: (val) => fieldEmptyValidator(val) ?? confirmPasswordMatchValidator(val ?? '', password),
+                  onChanged: (value) {
+                    clearValidatorHint();
+                    setConfirmPassword(value);
+                  },
                 ),
-                validator: (val) => fieldEmptyValidator(val) ?? confirmPasswordMatchValidator(val ?? ''),
-                onChanged: (value) {
-                  clearValidatorHint();
-                  setConfirmPassword(value);
-                },
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(onPressed: enableSignUpButton ? signUp : null, child: Text('sign_up'.tr())),
-              ),
-              Padding(padding: const EdgeInsets.symmetric(vertical: 16.0), child: textOnDivider(context, 'or'.tr())),
-              googleSignInButton(context, onPressed: signInGoogle),
-            ],
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(onPressed: enableSignUpButton ? signUp : null, child: Text('sign_up'.tr())),
+                ),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 16.0), child: textOnDivider(context, 'or'.tr())),
+                googleSignInButton(context, onPressed: signInGoogle),
+              ],
+            ),
           ),
         ),
       ),

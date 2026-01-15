@@ -6,7 +6,10 @@ import 'package:silversole/core/error/error_logger.dart';
 import 'package:silversole/core/error/result.dart';
 import 'package:silversole/shared/providers/auth_provider.dart';
 import 'package:silversole/shared/widgets/account_card.dart';
+import 'package:silversole/shared/widgets/recent_data_list.dart';
 import 'package:silversole/shared/widgets/update_check_bottom_modal.dart';
+
+import '../widgets/device_binding_field.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key, required this.title});
@@ -68,7 +71,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: Column(
                 spacing: 32,
                 children: [
-                  SizedBox(width: double.infinity, height: 100, child: accountCard(context, email, uuid)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -82,11 +84,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 1000,
-                    child: OutlinedButton(onPressed: comingSoon, child: Text('')),
-                  ),
+                  SizedBox(width: double.infinity, height: 100, child: accountCard(context, email, uuid)),
+                  DeviceBindingField(),
+                  RecentDataList(),
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   height: 1000,
+                  //   child: OutlinedButton(onPressed: comingSoon, child: Text('')),
+                  // ),
                 ],
               ),
             ),

@@ -9,6 +9,8 @@ import 'package:silversole/core/error/result.dart';
 import 'package:silversole/shared/models/auth_model.dart';
 import 'package:silversole/shared/providers/auth_provider.dart';
 
+import '../../core/utils/field_validator.dart';
+
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
 
@@ -29,13 +31,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   void setEmail(String value) => setState(() => email = value);
 
   void setPassword(String value) => setState(() => password = value);
-
-  String? fieldValidator(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'field_required'.tr();
-    }
-    return null;
-  }
 
   void signInGoogle() => comingSoon();
 
@@ -69,65 +64,66 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(onPressed: back, icon: const Icon(LucideIcons.arrowLeft)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 48),
-        child: Form(
-          key: _formKey,
-          autovalidateMode: _autoValidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            spacing: 16,
-            children: [
-              SizedBox(
-                height: 250,
-                child: Center(
-                  child: Text(
-                    'silversole'.tr(),
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                      fontFamily: 'Oxanium',
-                      fontVariations: const [FontVariation('wght', 600)],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(48, 0, 48, MediaQuery.of(context).viewInsets.bottom + 24),
+          child: Form(
+            key: _formKey,
+            autovalidateMode: _autoValidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 16,
+              children: [
+                SizedBox(
+                  height: 250,
+                  child: Center(
+                    child: Text(
+                      'silversole'.tr(),
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        fontFamily: 'Oxanium',
+                        fontVariations: const [FontVariation('wght', 600)],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'email'.tr(),
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(LucideIcons.mail),
+                TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: 'email'.tr(),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(LucideIcons.mail),
+                  ),
+                  validator: (val) => fieldEmptyValidator(val) ?? emailValidator(val ?? ''),
+                  onChanged: (value) => setEmail(value),
                 ),
-                validator: (val) => fieldValidator(val),
-                onChanged: (value) => setEmail(value),
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'password'.tr(),
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(LucideIcons.lock),
+                TextFormField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'password'.tr(),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(LucideIcons.lock),
+                  ),
+                  validator: (val) => fieldEmptyValidator(val),
+                  onChanged: (value) => setPassword(value),
                 ),
-                validator: (val) => fieldValidator(val),
-                onChanged: (value) => setPassword(value),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(onPressed: enableSignInButton ? signIn : null, child: Text('sign_in'.tr())),
-              ),
-              Padding(padding: const EdgeInsets.symmetric(vertical: 16.0), child: textOnDivider(context, 'or'.tr())),
-              googleSignInButton(context, onPressed: signInGoogle),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('no_account_prompt'.tr(), style: TextStyle(color: Colors.grey)),
-                  TextButton(onPressed: goToSignUp, child: Text('sign_up'.tr())),
-                ],
-              ),
-            ],
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(onPressed: enableSignInButton ? signIn : null, child: Text('sign_in'.tr())),
+                ),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 16.0), child: textOnDivider(context, 'or'.tr())),
+                googleSignInButton(context, onPressed: signInGoogle),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('no_account_prompt'.tr(), style: TextStyle(color: Colors.grey)),
+                    TextButton(onPressed: goToSignUp, child: Text('sign_up'.tr())),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
