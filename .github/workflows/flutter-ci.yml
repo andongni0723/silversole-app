@@ -41,6 +41,12 @@ jobs:
       - name: Test
         run: flutter test
 
+      - name: Create Android secrets
+        run: |
+          cat > android/secrets.properties <<'EOF'
+          MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}
+          EOF
+
       - name: Build Android Debug APK
         run: flutter build apk --debug
 

@@ -62,6 +62,12 @@ jobs:
           flutter analyze --no-fatal-warnings --no-fatal-infos
           flutter test
 
+      - name: Create Android secrets
+        run: |
+          cat > android/secrets.properties <<'EOF'
+          MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}
+          EOF
+
       - name: Build Release APK (signed)
         run: |
           flutter build apk --release --build-name=${{ env.VERSION_NAME }} --build-number=${{ env.VERSION_CODE }} --split-per-abi
