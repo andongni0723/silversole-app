@@ -39,11 +39,21 @@ class _MapCardState extends ConsumerState<MapCard> {
   var zoom = 14.0;
 
   Widget googleMap(String? style) {
-    return GoogleMap(
-      style: style,
-      zoomControlsEnabled: false,
-      initialCameraPosition: CameraPosition(target: initialCenter, zoom: zoom),
-      gestureRecognizers: {Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())},
+    final tt = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('device_recent_locations'.tr(), style: tt.titleSmall?.copyWith(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Expanded(
+          child: GoogleMap(
+            style: style,
+            zoomControlsEnabled: false,
+            initialCameraPosition: CameraPosition(target: initialCenter, zoom: zoom),
+            gestureRecognizers: {Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())},
+          ),
+        ),
+      ],
     );
   }
 
@@ -81,10 +91,10 @@ class _MapCardState extends ConsumerState<MapCard> {
     return SizedBox(
       width: double.infinity,
       height: 300,
-      child: Card.outlined(
+      child: Card(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: (settings.deviceId != null) ? googleMap(style) : hintBindingPage(),
+          child: settings.deviceId != null ? googleMap(style) : hintBindingPage(),
         ),
       ),
     );

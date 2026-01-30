@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:silversole/shared/pages/device_recent_warnings_page.dart';
 import 'package:silversole/shared/pages/home_page.dart';
 import 'package:silversole/shared/pages/sign_in_page.dart';
 import 'package:silversole/shared/pages/sign_up_page.dart';
@@ -11,5 +12,6 @@ final router = GoRouter(
     ),
     GoRoute(path: '/sign-in', builder: (_, _) => SignInPage()),
     GoRoute(path: '/sign-up', builder: (_, _) => SignUpPage()),
+    GoRoute(path: '/device-recent-warnings', builder: (_, _) => DeviceRecentWarningsPage())
   ],
 );

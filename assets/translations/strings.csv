@@ -45,3 +45,8 @@ offline,Offline,離線
 online,Online,連線中
 done,Done,完成
 map_binding_required,Bind a device to use map features,需要綁定後才能使用地圖功能
+device_recent_locations,Recent device locations,裝置最近位置
+device_recent_warnings,Recent device warnings,裝置近期警告
+device_recent_data,Recent device data,裝置近期資料
+events,Events,事件
+safe,Safe,安全

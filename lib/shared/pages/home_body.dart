@@ -6,6 +6,7 @@ import 'package:silversole/shared/models/user_identity.dart';
 import 'package:silversole/shared/providers/settings_provider.dart';
 import 'package:silversole/shared/widgets/account_card.dart';
 import 'package:silversole/shared/widgets/map_card.dart';
+import 'package:silversole/shared/widgets/warning_card.dart';
 
 import '../widgets/recent_data_list.dart';
 
@@ -38,7 +39,7 @@ class _HomeBodyState extends ConsumerState<HomeBody> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           sliver: SliverToBoxAdapter(
             child: Column(
-              spacing: 32,
+              spacing: 16,
               children: [
                 SizedBox(
                   height: 100,
@@ -51,7 +52,24 @@ class _HomeBodyState extends ConsumerState<HomeBody> {
                   ),
                 ),
                 MapCard(),
+                // Row(children: [WarningCard(), WarningCard()]),
+                GridView.count(
+                  padding: EdgeInsets.zero,
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 0.9,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: const [
+                    WarningCard(),
+                    WarningCard(),
+                    // WarningCard(),
+                    // WarningCard(),
+                  ],
+                ),
                 RecentDataList(),
+                // WarningCard(),
               ],
             ),
           ),

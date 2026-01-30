@@ -10,7 +10,7 @@ Widget statusCard(
 }) {
   final tt = Theme.of(context).textTheme;
 
-  return Card.outlined(
+  return Card(
     child: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -29,14 +29,19 @@ Widget statusCard(
                   Text(title, style: tt.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                   if (active != null) ...[
                     const SizedBox(width: 4),
-                    Text(
-                      '•',
-                      style: TextStyle(
-                        color: active ? Colors.green : Colors.red,
-                        fontSize: tt.titleMedium?.fontSize ?? 20,
+                    SizedBox(
+                      width: 70,
+                      height: 32,
+                      child: Card(
+                        color: active ? Colors.green[800] : Colors.red,
+                        child: Center(
+                          child: Text(
+                            active ? 'online'.tr() : 'offline'.tr(),
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
                     ),
-                    Text(active ? 'online'.tr() : 'offline'.tr(), style: TextStyle(color: Colors.grey)),
                   ],
                 ],
               ),
